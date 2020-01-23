@@ -1,11 +1,29 @@
 // todo => use a key to track the current video, or just pass the video in as a ref to the function and grab its source
+Vue.component('poster', {
+  props: {
+    vidsource: String,
+    thumb: String
+  },
+
+  template: `
+      <li>
+      <a :href="vidsource" v-on:click.prevent="$emit('make-selection')">
+        <img :src="'images/' + thumb" alt="movie poster">
+      </a>
+    </li>
+  `
+})
+
 
 var vm = new Vue({
   el: "#app",
 
   data: {
     // mock up the user - this well eventually come from the database UMS (user management system)
-    user: {},
+    user: {
+      isLoggedIn: false,
+      settings: {}
+    },
 
     // this data would also come from the database, but we'll just mock it up for now
     videodata: [
@@ -44,7 +62,9 @@ var vm = new Vue({
     },
 
     // this is ES6 data destructuring - pull the keys and values you need, not the whole object
-    loadMovie({name, description, vidsource}) {
+    loadMovie() { //{name, description, vidsource}
+      debugger;
+      
       console.log('show movie details');
 
       this.videotitle = name;
@@ -66,7 +86,7 @@ var vm = new Vue({
         console.log(data);
 
         // push our user data into the VM
-        this.user = data[0];
+        this.user.settings = data[0];
       })
       .catch((err) => console.log(err))
     }
